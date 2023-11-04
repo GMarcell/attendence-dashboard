@@ -6,6 +6,8 @@ function Navbar() {
 	const { user, googleSignIn, logout, EmailSignIn } = UserAuth();
 
 	const [loading, setLoading] = useState(true);
+  const [email, setEmail] = useState("");
+	const [password, setpassword] = useState("");
 
 	const handleSignIn = async () => {
 		try {
@@ -18,6 +20,14 @@ function Navbar() {
 	const handleSignOut = async () => {
 		try {
 			await logout();
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+  const handleSignInEmail = async () => {
+		try {
+			await EmailSignIn(email, password)
 		} catch (error) {
 			console.log(error);
 		}
@@ -46,24 +56,69 @@ function Navbar() {
 			</ul>
 			{loading ? null : !user ? (
 				<ul className="flex">
-					<li className="p-2 cursor-pointer">
-						<Link href="/sign-in-email">Login With Email</Link>
-					</li>
-					<li onClick={handleSignIn} className="p-2 cursor-pointer">
+					<li
+						className="p-2 cursor-pointer"
+						onClick={() => document.getElementById("my_modal_3").showModal()}
+					>
 						Login
 					</li>
-					<li onClick={handleSignIn} className="p-2 cursor-pointer">
+					{/* <li onClick={handleSignIn} className="p-2 cursor-pointer">
+						Login With Google
+					</li> */}
+					{/* <li onClick={handleSignIn} className="p-2 cursor-pointer">
 						Sign Up
-					</li>
+					</li> */}
 				</ul>
 			) : (
 				<div>
-					<p>Welcome, {user.displayName}</p>
+					<p>Welcome, {user.email}</p>
 					<p onClick={handleSignOut} className="cursor-pointer">
 						Sign Out
 					</p>
 				</div>
 			)}
+
+			<dialog id="my_modal_3" className="modal">
+				<div className="modal-box">
+					<form method="dialog">
+						Sign In With Email
+						<div className="my-4">
+							<div className="form-control w-full">
+								<label className="label">
+									<span className="label-text">Email</span>
+								</label>
+								<input
+									type="text"
+									placeholder="Type here"
+									className="input input-bordered w-full"
+									onChange={(e) => setEmail(e.target.value)}
+								/>
+							</div>
+							<div className="form-control w-full">
+								<label className="label">
+									<span className="label-text">Password</span>
+								</label>
+								<input
+									type="text"
+									placeholder="Type here"
+									className="input input-bordered w-full"
+									onChange={(e) => setpassword(e.target.value)}
+								/>
+							</div>
+						</div>
+						<button
+							className="btn btn-active btn-primary"
+							onClick={() => handleSignInEmail()}
+						>
+							Submit
+						</button>
+						{/* if there is a button in form, it will close the modal */}
+						<button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+							✕
+						</button>
+					</form>
+				</div>
+			</dialog>
 		</div>
 	);
 }
