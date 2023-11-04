@@ -18,7 +18,7 @@ function ProfilePage() {
 	return (
 		<div className="p-4">
 			{user ? (
-				<p>Congrats, You are Logged In {user.displayName}</p>
+				<p>Congrats, You are Logged In {user.email}</p>
 			) : (
 				<p>You need to Login</p>
 			)}
