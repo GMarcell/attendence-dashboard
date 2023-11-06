@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { db } from "./firebase";
 import { addDoc, collection } from "firebase/firestore";
+import Swal from "sweetalert2";
 
 export default function Home() {
 	const [date, setDate] = useState("");
@@ -9,16 +10,13 @@ export default function Home() {
 	const [woman, setWoman] = useState(0);
 	const [child, setChild] = useState(0);
 
-	const [toastShow, setToastShow] = useState(true);
-	const [toastMesasge, setToastMesasge] = useState("");
-	const [toastSucess, setToastSucess] = useState(true);
-
 	const addData = () => {
 		if (date == "") {
-			setToastMesasge("Date is Required");
-			setToastShow(true);
-			setToastSucess(false);
-			console.log("hello");
+			Swal.fire({
+				icon: 'error',
+				text: 'Date is Required',
+				timer: 1500,
+			})
 		} else {
 			const data = {
 				date: date,
@@ -31,22 +29,23 @@ export default function Home() {
 				setMan(0);
 				setWoman(0);
 				setChild(0);
-				setToastShow(true);
-				setToastMesasge("Data Added Succesfully");
-				setToastSucess(true);
+				Swal.fire({
+					icon: 'success',
+					text: 'Data Added Succesfully',
+					timer: 1500,
+				})
+			}).catch((error) => {
+				Swal.fire({
+					icon: 'error',
+					text: error,
+					timer: 1500,
+				})
 			});
 		}
 	};
 
 	return (
 		<main className="p-4">
-			{toastShow ? (
-				<div className="toast toast-top toast-end">
-					<div className={`alert alert-${toastSucess ? "success" : "error"}`}>
-						<span>{toastMesasge}</span>
-					</div>
-				</div>
-			) : null}
 
 			<div className="flex justify-between">
 				<div className="form-control w-full ml-4">
